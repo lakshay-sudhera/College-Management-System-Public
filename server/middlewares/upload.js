@@ -8,7 +8,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "college-calendar",
     resource_type: "auto",
-    format: async (req, file) => "jpeg", // 🔥 FORCE jpeg FORMAT
+    format: async (req, file) => "jpeg", // FORCE jpeg FORMAT
   },
 });
 

@@ -22,6 +22,7 @@ exports.createAssignment = async (req, res) => {
     const assignment = await Assignment.create({
       title,
       course: courseId,
+      // professor:req.user.id
     });
 
     res.json(assignment);
@@ -54,12 +55,6 @@ exports.markAttendanceBulk = async (req, res) => {
   
   try {
     // Optional: prevent duplicate for same date
-    const records = attendanceData.map((item) => ({
-      course: item.courseId,
-      student: item.studentId,
-      status: item.status,
-      date: new Date(),
-    }));
     //for deleting dublicate values
     // await Attendance.deleteMany({
     //   course: records[0].course,
@@ -68,6 +63,13 @@ exports.markAttendanceBulk = async (req, res) => {
     //     $lte: new Date().setHours(23, 59, 59, 999),
     //   },
     // });
+    const records = attendanceData.map((item) => ({
+      course: item.courseId,
+      student: item.studentId,
+      status: item.status,
+      date: new Date(),
+    }));
+   
     
     await Attendance.insertMany(records);
 
@@ -241,7 +243,7 @@ exports.evaluateTest = async (req, res) => {
     });
     
     if (!submission) {
-      // console.log("submissions not found");
+      console.log("submissions not found");
 
       return res.status(404).json({ message: "Submission not found" });
     }
@@ -268,7 +270,7 @@ exports.evaluateTest = async (req, res) => {
 exports.addTestGrade = async (req, res) => {
   const { courseId, studentId, test, marks } = req.body;
   // console.log( courseId, studentId, testTitle, marks );
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
     const grade = await Grade.create({
@@ -278,7 +280,7 @@ exports.addTestGrade = async (req, res) => {
       test: test,
       marks,
     });
-    console.log(grade);
+    // console.log(grade);
     res.json(grade);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -295,10 +297,9 @@ exports.getAdvancedAnalytics = async (req, res) => {
     //find : returns a list of documents that match filter
 
     const testList = grades.filter((a) => a.assignment.trim() === "")
-    const avgTestMarks = testList.reduce((sum, g) => sum + g.marks, 0) / testList.length || 0;
-
+    const avgTestMarks =( testList.reduce((sum, g) => sum + (g.marks || 0), 0) / testList.length ) || 0;
     const assignmentList = grades.filter((a) => a.test.trim() === "")
-    const avgAssignmentMarks = assignmentList.reduce((sum, g) => sum + g.marks, 0) / assignmentList.length || 0;
+    const avgAssignmentMarks = assignmentList.reduce((sum, g) => sum + (g.marks||0), 0) / assignmentList.length || 0;
 
 
     const present = attendance.filter(a => a.status === "present").length;
@@ -334,10 +335,10 @@ exports.getStudentPerformance = async (req, res) => {
       course: courseId,
     });
     const testList = grades.filter((a) => a.assignment.trim() === "")
-    const avgTestMarks = testList.reduce((sum, g) => sum + g.marks, 0) / testList.length || 0;
+    const avgTestMarks = testList.reduce((sum, g) => sum + (g.marks||0), 0) / testList.length || 0;
 
     const assignmentList = grades.filter((a) => a.test.trim() === "")
-    const avgAssignmentMarks = assignmentList.reduce((sum, g) => sum + g.marks, 0) / assignmentList.length || 0;
+    const avgAssignmentMarks = assignmentList.reduce((sum, g) => sum + (g.marks||0), 0) / assignmentList.length || 0;
 
 
     const present = attendance.filter(a => a.status === "present").length;

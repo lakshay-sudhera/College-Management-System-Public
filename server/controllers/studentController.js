@@ -64,6 +64,25 @@ exports.getAssignments = async (req, res) => {
 
   res.json(assignments);
 };
+exports.getStudentAssignments = async (req, res) => {
+  try {
+    // Find courses where student is enrolled
+    const courses = await Course.find({
+      students: req.user.id,
+    }).select("_id");
+
+    const courseIds = courses.map((c) => c._id);
+
+    // Find tests for those courses
+    const assignments = await Assignment.find({
+      course: { $in: courseIds },
+    }).populate("course", "name code");
+
+    res.json(assignments);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 exports.getStudentTests = async (req, res) => {
   try {
     // Find courses where student is enrolled
@@ -104,11 +123,11 @@ exports.getMyProgress = async (req, res) => {
 
     //  Average assignment marks
     const assignmentList = grades.filter((a) => a.test.trim() === "")
-    const avgAssignmentMarks = assignmentList.reduce((acc, g) => acc + g.marks, 0) / assignmentList.length || 0;
+    const avgAssignmentMarks = assignmentList.reduce((acc, g) => acc + (g.marks||0), 0) / assignmentList.length || 0;
 
     //  Average Test marks
     const testList = grades.filter((a) => a.assignment.trim() === "")
-    const avgTestMarks = testList.reduce((sum, g) => sum + g.marks, 0) / testList.length || 0;
+    const avgTestMarks = testList.reduce((sum, g) => sum + (g.marks||0), 0) / testList.length || 0;
 
     //  Attendance %
     const present = attendance.filter(

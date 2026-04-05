@@ -9,6 +9,10 @@ const assignmentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
+    // professor:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref:"User"
+    // },
     submissions: [
       {
         student: { 

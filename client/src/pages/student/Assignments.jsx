@@ -1,12 +1,19 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../../services/api";
 
 export default function Assignments() {
+  const [assignments, setAssignments] = useState([]);
+
   const [assignmentId, setAssignmentId] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  // Fetch assignments
+  useEffect(() => {
+    API.get("/student/getAssignments")
+      .then((res) => setAssignments(res.data))
+      .catch((err) => console.log(err));
+  }, []);
   const submit = async () => {
     if (!assignmentId || !file) {
       return alert("Please fill all fields");
@@ -41,9 +48,29 @@ export default function Assignments() {
         <h2 className="text-2xl font-bold text-center mb-6">
           Submit Assignment 📄
         </h2>
+        {/* Assignment DROPDOWN */}
+        <div className="mb-4">
+          <label className="block text-sm text-gray-600 mb-1">
+            Select Assignment
+          </label>
+
+          <select
+            value={assignmentId}
+            onChange={(e) => setAssignmentId(e.target.value)}
+            className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="">Select Assignment</option>
+
+            {assignments.map((t) => (
+              <option key={t._id} value={t._id}>
+                {t.title}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* ASSIGNMENT ID */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-sm text-gray-600 mb-1">
             Assignment ID
           </label>
@@ -53,7 +80,7 @@ export default function Assignments() {
             placeholder="Enter assignment ID"
             className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-        </div>
+        </div> */}
 
         {/* FILE UPLOAD */}
         <div className="mb-6">
@@ -62,7 +89,7 @@ export default function Assignments() {
           </label>
 
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition">
-            
+
             <input
               type="file"
               className="hidden"
@@ -90,8 +117,8 @@ export default function Assignments() {
           onClick={submit}
           disabled={loading}
           className={`w-full py-3 rounded-lg text-white font-semibold transition 
-            ${loading 
-              ? "bg-gray-400 cursor-not-allowed" 
+            ${loading
+              ? "bg-gray-400 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-600"
             }`}
         >

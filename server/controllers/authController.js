@@ -93,7 +93,7 @@ exports.loginUser = async (req, res) => {
 };
 
 //otp verification 
-// ⚠️ Important Notes
+// Important Notes
 // Right now OTP is printed in console
 // Next step → send via email (Nodemailer)
 // You can later:
@@ -116,7 +116,7 @@ exports.verifyOTP = async (req, res) => {
 
     await user.save();
 
-    // step 2 :✅ NOW give token
+    // step 2 : NOW give token
     const token = generateToken(user);
 
     res.json({

@@ -32,7 +32,7 @@ export default function Grades() {
           <div className="grid grid-cols-4 bg-gray-100 p-4 font-semibold text-gray-600">
             <span>Course</span>
             <span>Type</span>
-            <span>Title</span>
+            <span>Title/TestId</span>
             <span>Marks</span>
           </div>
 
@@ -73,7 +73,7 @@ export default function Grades() {
                   ${g.marks > 70 ? "text-green-600" :
                   g.marks > 50 ? "text-yellow-500" :
                     "text-red-500"}`}>
-                {g.marks}
+                {g.marks || 0}
               </span>
 
             </div>

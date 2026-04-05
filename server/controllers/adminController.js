@@ -3,7 +3,7 @@ const Course = require("../models/Course");
 const Calendar = require("../models/Calendar");
 const LoginLog = require("../models/LoginLog")
 
-// 📌 Get all users
+//  Get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -45,7 +45,7 @@ exports.addStudentToCourse = async (req, res) => {
  
    res.json({ message: "Student removed" });
  };
-// 📌 Get users by role
+//  Get users by role
 exports.getUsersByRole = async (req, res) => {
   const { role } = req.params;
 
@@ -58,7 +58,7 @@ exports.getUsersByRole = async (req, res) => {
 };
 
 
-// 📌 Update user
+// Update user
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
 
@@ -76,7 +76,7 @@ exports.updateUser = async (req, res) => {
 };
 
 
-// 📌 Delete user
+//  Delete user
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
 
@@ -90,7 +90,7 @@ exports.deleteUser = async (req, res) => {
 
 
 //course management
-// 📌 Create course
+//  Create course
 exports.createCourse = async (req, res) => {
   const { name, code, professor } = req.body;
 
@@ -108,7 +108,7 @@ exports.createCourse = async (req, res) => {
 };
 
 
-// 📌 Get all courses
+//  Get all courses
 exports.getCourses = async (req, res) => {
   try {
     const courses = await Course.find()
@@ -139,7 +139,7 @@ exports.getCourseById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-// 📌 Delete course
+//  Delete course
 exports.deleteCourse = async (req, res) => {
   const { id } = req.params;
 
@@ -156,14 +156,16 @@ exports.deleteCourse = async (req, res) => {
 
 exports.uploadCalendar = async (req, res) => {
 
-  console.log(req.file);
+  // console.log(req.file);
 
   
   try {
     const calendar = await Calendar.create({
       title: req.body.title,
       fileUrl:req.file.path, // Cloudinary URL
-      uploadedBy: req.user._id,
+      // uploadedBy: req.user._id,
+      uploadedBy: req.user.id,
+
     });
     // console.log(calendar.url);
     res.json(calendar);
@@ -195,7 +197,7 @@ exports.getLoginLogs = async (req, res) => {
   }
 };
 
-// ⚠️ Important Improvements (Do This Later)
+// Important Improvements (Do This Later)
 // Validate professor role before assigning course
 // Prevent deleting users linked to courses
 // Add pagination

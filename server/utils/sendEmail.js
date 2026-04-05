@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 // Send password setup link (admin-created users)
 //email verification
 
-// ⚠️ IMPORTANT (Gmail Setup)
+//  IMPORTANT (Gmail Setup)
 // If using Gmail:
 // Enable 2-Step Verification
 // Generate App Password (NOT your real password)

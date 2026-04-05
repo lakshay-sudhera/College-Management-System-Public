@@ -34,11 +34,9 @@ export default function StudentDashboard() {
         API.get("/student/attendance")
           .then(res => setData(res.data))
           .catch(err => console.log(err));        // console.log(grades, attendance);
-
         const avg =
-          grades.data.reduce((acc, g) => acc + g.marks, 0) /
+          grades.data.reduce((acc, g) => acc + (g.marks||0), 0) /
           (grades.data.length || 1);
-        // console.log(avg);
         // Calculate attendance %
         // console.log(attend);
         const total = attend.length;
@@ -53,7 +51,7 @@ export default function StudentDashboard() {
         });
 
 
-        console.log(stats);
+        // console.log(stats);
       } catch (err) {
         console.log(err);
       }

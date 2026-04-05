@@ -9,7 +9,8 @@ const {
   getMyProgress,
   getCalendar,
   getAssignments,
-  getStudentTests
+  getStudentTests,
+  getStudentAssignments
 } = require("../controllers/studentController");
 
 const protect = require("../middlewares/authMiddleware");
@@ -20,6 +21,7 @@ const upload = require("../middlewares/upload");
 router.use(protect, authorizeRoles("student"));
 router.get("/assignments",getAssignments)
 router.get("/tests", getStudentTests);
+router.get("/getAssignments",getStudentAssignments);
 router.post("/assignments/submit", upload.single("file"),submitAssignment);
 router.post("/tests/submit",upload.single("file"), submitTest);
 router.get("/grades", getMyGrades);
