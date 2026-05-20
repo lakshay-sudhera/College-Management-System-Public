@@ -36,59 +36,64 @@ exports.loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({
+        message: "User not found",
+      });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({
+        message: "Invalid credentials",
+      });
     }
-    //verification is necessary for login
+
     if (!user.isVerified) {
       return res.status(401).json({
         message: "Please verify your email before logging in",
       });
     }
-    
-    // 2FA otp sysytem
-      try {
-        const otp = generateOTP();
-    
-        user.otp = otp;
-        user.otpExpire = Date.now() + 5 * 60 * 1000; // 5 min
-    
-        await user.save();
-        // console.log(otp);
-        await sendEmail({
-          email: user.email,
-          subject: "Your OTP Code",
-          message: `
-            <h2>OTP Verification</h2>
-            <p>Your OTP is: <b>${otp}</b></p>
-            <p>This OTP will expire in 5 minutes.</p>
-          `,
-        });
-    
-        res.json({
-          message: "OTP sent to your email",
-          userId: user._id,
-        });
- 
-  
-        } 
-        catch (error) {
-           res.status(500).json({ message: error.message },{error:"otp cant generated"});
-        }
-        //save logs in login
 
-          await LoginLog.create({
-            user: user._id,
-            email: user.email,
-            ip: req.ip,
-          });
+    // Generate OTP
+    const otp = generateOTP();
+
+    user.otp = otp;
+    user.otpExpire = Date.now() + 5 * 60 * 1000;
+
+    await user.save();
+
+    // Send email
+    await sendEmail({
+      email: user.email,
+      subject: "Your OTP Code",
+      message: `
+        <h2>OTP Verification</h2>
+        <p>Your OTP is: <b>${otp}</b></p>
+        <p>This OTP will expire in 5 minutes.</p>
+      `,
+    });
+
+    // Save login log
+    await LoginLog.create({
+      user: user._id,
+      email: user.email,
+      ip: req.ip,
+    });
+
+    // FINAL RESPONSE
+    return res.status(200).json({
+      message: "OTP sent to your email",
+      userId: user._id,
+    });
+
   } catch (error) {
-    res.status(500).json({ message: error.message },{error:"login unsuccesful"});
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
