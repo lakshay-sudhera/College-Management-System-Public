@@ -2,10 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 // Middleware
-app.use(cors({
-  origin: "https://college-management-system-public-2.vercel.app",
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
