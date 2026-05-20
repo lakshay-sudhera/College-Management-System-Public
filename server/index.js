@@ -14,11 +14,11 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(express.json());
 app.use(cors({
-  origin: "https://college-management-system-public-2.vercel.app/",
+  origin: "https://college-management-system-public-2.vercel.app",
   credentials: true
 }));
+app.use(express.json());
 
 // Test route
 app.get("/", (req, res) => {
