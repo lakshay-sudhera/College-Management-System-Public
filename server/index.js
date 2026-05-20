@@ -1,7 +1,18 @@
 const express = require("express");
-const dotenv = require("dotenv");
 const cors = require("cors");
+const app = express();
+// Middleware
+app.use(cors({
+  origin: "https://college-management-system-public-2.vercel.app",
+  credentials: true
+}));
+app.use(express.json());
 const connectDB = require("./config/db");
+const dotenv = require("dotenv");
+
+dotenv.config();
+connectDB();
+
 const testRoutes = require("./routes/testRoutes");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -9,16 +20,8 @@ const professorRoutes = require("./routes/professorRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 // const upload = require("../middlewares/upload");
 
-dotenv.config();
-connectDB();
-const app = express();
 
-// Middleware
-app.use(cors({
-  origin: "https://college-management-system-public-2.vercel.app",
-  credentials: true
-}));
-app.use(express.json());
+
 
 // Test route
 app.get("/", (req, res) => {
