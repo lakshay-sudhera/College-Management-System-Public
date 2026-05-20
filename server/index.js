@@ -16,7 +16,8 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "*",
+  origin: "https://college-management-system-public-2.vercel.app/",
+  credentials: true
 }));
 
 // Test route
