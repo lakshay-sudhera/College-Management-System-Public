@@ -1,6 +1,10 @@
 # 🎓 College Management System
 
-A full-stack MERN application for managing:
+A full-stack College Management System built using the MERN stack with role-based authentication, analytics dashboards, attendance tracking, assignment/test management, and academic workflow automation.
+
+🌐 **Live Demo:** https://lkscollege.vercel.app  
+📦 **GitHub Repository:** https://github.com/lakshay-sudhera/College-Management-System-Public
+
 
 ## 👨‍💼 Admin
 - Manage users
@@ -29,12 +33,12 @@ A full-stack MERN application for managing:
 ## ⚙️ Setup
 
 ### Backend
-npm install
-npm run dev
+npm install <br>
+npm run dev <br>
 
 ### Frontend
-npm install
-npm run dev
+npm install <br>
+npm run dev <br>
 
 ## 🔐 Environment Variables
 Create `.env` file using `.env.example`
